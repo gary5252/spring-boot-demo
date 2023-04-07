@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>購物車</title>
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="../static/images/shopping-cart.png" th:href="@{/images/shopping-cart.png}">
+    <!-- <link rel="icon" type="image/png" href="images/icons/favicon.ico" th:href="@{/images/icons/favicon.ico}" /> -->
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css"
+        th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"
+        th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css"
+        th:href="@{/fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css" th:href="@{/vendor/animate/animate.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css"
+        th:href="@{/vendor/css-hamburgers/hamburgers.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css"
+        th:href="@{/vendor/animsition/css/animsition.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css"
+        th:href="@{/vendor/select2/select2.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css"
+        th:href="@{/vendor/daterangepicker/daterangepicker.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" href="css/main.css" th:href="@{/css/main.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+</head>
+
+<body>
+    <div class="header" style="padding-top: 10px;margin-bottom: 20px;">
+        <!-- <a href="#" th:href="@{/{mid}/member(mid=${member.mid})}"> -->
+        <a href="#" th:href="@{/member}">
+            <span th:text="${session.member.mname}" style="font-size: x-large;margin-left: 20px;">user</span>
+        </a>
+        <strong style="padding-left: 10px;"> 的購物車清單</strong>
+        <!-- <span th:text="${session.member.mid}" style="color: red;"></span> -->
+        <a class="btn btn-light" href="./login.html" th:href="@{/logout}"
+            style="float: right;margin-right: 10px;color: dimgray;">登出</a>
+    </div>
+    <hr class="hr-shadow">
+    <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+        <div class="wrap-login100" style="padding: 30px 30px 50px 50px;">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                th:unless="${#strings.isEmpty(message)}" style="margin-top: 20px;">
+                <span th:text="${message}">submit success</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <h1 class="page-header" style="margin-bottom: 30px;text-align: center;">Buy Lists</h1>
+            <!-- <p style="padding-bottom: 10px;"><a href="./input.html" th:href="@{/}"
+                    class="btn btn-primary">新增</a></p> -->
+
+            <table class="table table-borded table-striped table-hover" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">#</th>
+                        <th style="text-align: center;">NAME</th>
+                        <th style="text-align: center;">PRICE</th>
+                        <th style="text-align: center;">AMOUNT</th>
+                        <!-- <th style="text-align: center;">DESCRIPTION</th> -->
+                        <!-- <th style="text-align: center;" th:if="${member.isAdmin()}">CID</th> -->
+                        <th style="text-align: center;">operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="temp,iterStat:${temps}">
+                        <!-- <tr th:each="product,iterStat:${page.content}"> -->
+                        <td th:text="${iterStat.count}">1</td>
+                        <!-- <td><a href="#" th:text="${product.name}" th:href="@{/products/{pid}(pid=${product.pid})}">PC</a></td> -->
+                        <td><a href="#" th:text="${temp.name}" th:href="@{'/products/' + ${temp.pid}}">PC</a></td>
+                        <!-- th:text 標籤如果放到外層會將 html 標籤也一起覆寫掉 -->
+                        <td th:text="${temp.price}">20000</td>
+                        <td th:text="${temp.amount}">500</td>
+                        <!-- <td th:text="${product.description}">repairing</td> -->
+                        <!-- <td th:text="${product.cid}" th:if="${member.isAdmin()}">cid</td> -->
+                        <td>
+                            <a href="#" th:href="@{/products/buylist/{pid}/buy/update(pid=${temp.pid})}">更新</a>&nbsp;
+                            <a href="#" th:href="@{/products/buylist/{pid}/buy/delete(pid=${temp.pid})}">刪除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p th:if="${none}" style="font-size: xx-large;text-align: center;">你還沒有選擇商品</p>
+            <p style="float: right;">總金額 : <span th:text="${total}">0</span> (NTDs)</p>
+
+            <form class="login100-form flex-sb flex-w" method="GET" th:action="@{/products/checkOrder}">
+                <!-- <input type="hidden" name="mid" th:value="${member.mid}">
+                <input type="hidden" name="mname" th:value="${member.mname}">
+                <input type="hidden" name="prodList" th:value="${prodList}">
+                <input type="hidden" name="amountList" th:value="${amountList}">
+                <input type="hidden" name="priceList" th:value="${priceList}">
+                <input type="hidden" name="totalPrice" th:value="${total}">
+                <input type="hidden" name="buyDate" th:value="${buyDate}"> -->
+                <div class="container-login100-form-btn m-t-17" th:unless="${none}">
+                    <button class="login100-form-btn" type="submit">
+                        確認購買
+                    </button>
+                </div>
+            </form>
+
+            <div class="container-login100-form-btn m-t-17">
+                <button class="login100-form-btn" type="button">
+                    <!-- <a href="javascript:history.go(-1)" -->
+                    <a href="#" th:href="@{/products}"
+                        style="width:100%;height:100%;display:inline-block;color:white;font-size:medium;padding-top: 1rem;">
+                        返回
+                    </a>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="w-full text-center p-t-55" style="padding-bottom: 10px;padding-top: 10px;">
+        <span class="txt2">
+            <a href="https://www.flaticon.com/free-icons/goods" title="goods icons">Goods icons created by wanicon -
+                Flaticon</a>
+        </span>
+    </div>
+
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery-3.2.1.min.js" th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/animsition/js/animsition.min.js" th:src="@{/vendor/animsition/js/animsition.min.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js" th:src="@{/vendor/bootstrap/js/popper.js}"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js" th:src="@{/vendor/select2/select2.min.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/daterangepicker/moment.min.js" th:src="@{/vendor/daterangepicker/moment.min.js}"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"
+        th:src="@{/vendor/daterangepicker/daterangepicker.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/countdowntime/countdowntime.js" th:src="@{/vendor/countdowntime/countdowntime.js}"></script>
+    <!--===============================================================================================-->
+    <script src="js/main.js" th:src="@{/js/main.js}"></script>
+    <!-- <script>
+        $(document).ready(() => {
+            $('close').click(() => {
+                $('.alert').alert('close');
+            });
+        });
+    </script> -->
+</body>
+
+</html>

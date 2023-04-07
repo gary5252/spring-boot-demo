@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"> -->
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>單一查詢</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css">
+    <!-- @{...} 鏈結表達式 -> th:href 默認從 static 資料夾開始尋找靜態資源 -->
+    <link rel="stylesheet" type="text/css" href="css/util.css" th:href="@{/css/util.css}">
+    <!-- <link rel="stylesheet" type="text/css" href="css/main.css" th:href="@{/css/main.css}"> -->
+    <link rel="icon" href="../static/images/shopping-cart.png" th:href="@{/images/shopping-cart.png}">
+
+</head>
+
+<body th:object="${product}">
+    <div class="container"
+        style="max-width:700px;background-color:grey;border-radius:6px;color: azure;padding-bottom: 20px;">
+        <div style="background-image: url('images/bg-01.jpg');">
+            <!-- 其他 Thymeleaf input 標籤 -> th:value/ th:field /...  -->
+            <h2 class="page-header" style="margin-top: 50px;margin-bottom: 20px;padding-top: 20px;text-align: center;">
+                details</h2>
+            <hr>
+            <img src="../static/images/img02.jpg" alt="" th:src="@{/images/img02.jpg}"
+                style="display:inline-block;max-width: 60%;max-height: 50%;margin-left: 50px;margin-top: 0px;position: relative;">
+            <ul style="display: inline-block;list-style: none;margin-top: 20px;">
+                <li style="font-size: larger;margin-bottom: 10px;">
+                    <strong>name : </strong><span th:text="*{name}">PC</span>
+                </li>
+                <li style="font-size: larger;margin-bottom: 10px;">
+                    <strong>price : </strong><span th:text="*{price}">20000</span>
+                </li>
+                <li style="font-size: larger;margin-bottom: 10px;">
+                    <strong>amount : </strong><span th:text="*{amount}">500</span>
+                </li>
+                <li style="font-size: larger;margin-bottom: 10px;">
+                    <strong>description : </strong><br><span th:text="*{description}">repairing</span>
+                </li>
+                <li style="font-size: larger;margin-bottom: 10px;">
+                    <strong>cid : </strong><span th:text="*{cid}">cid</span>
+                </li>
+            </ul>
+            <div th:switch="${product.amountCheck()}" style="margin-top: 30px;margin-left: 30px;">
+                <span class="alert alert-danger" th:case="out">存貨不足</span>
+                <span class="alert alert-success" th:case="normal">存貨正常</span>
+                <span class="alert alert-warning" th:case="over">存貨過多</span>
+                <span class="alert alert-info" th:case="*">unkwown</span>
+                <!-- case="*" 不符合其他case條件 -->
+            </div>
+            <br>
+            <a href="javascript:history.go(-1)" class="btn btn-primary"
+                style="color: aliceblue;margin-left: 30px;">返回</a>
+        </div>
+    </div>
+    <div class="w-full text-center p-t-55">
+        <span class="txt2">
+            <a href="https://www.flaticon.com/free-icons/goods" title="goods icons">Goods icons created by wanicon -
+                Flaticon</a>
+        </span>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+    <!-- @{...} 鏈結表達式 -> th:src 同樣默認從 static 資料夾開始尋找靜態資源，
+    jquery 的部分因為是從網路上加載資源所以不用納入表達式，若是將資源下載放置
+    在本地資料夾成為靜態資源才需要納入表達式中 -->
+</body>
+
+</html>

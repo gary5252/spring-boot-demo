@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auctions</title>
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="../static/images/auction.png" th:href="@{/images/auction.png}">
+    <!-- <link rel="icon" type="image/png" href="images/icons/favicon.ico" th:href="@{/images/icons/favicon.ico}" /> -->
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css"
+        th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"
+        th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css"
+        th:href="@{/fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css" th:href="@{/vendor/animate/animate.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css"
+        th:href="@{/vendor/css-hamburgers/hamburgers.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css"
+        th:href="@{/vendor/animsition/css/animsition.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css"
+        th:href="@{/vendor/select2/select2.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css"
+        th:href="@{/vendor/daterangepicker/daterangepicker.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css" th:href="@{/css/util.css}">
+    <link rel="stylesheet" type="text/css" href="css/main.css" th:href="@{/css/main.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+</head>
+
+<body>
+    <div class="header" style="padding-top: 10px;margin-bottom: 20px;">
+        <strong style="padding-left: 10px;">Welcome &nbsp;</strong>
+        <a href="#" th:href="@{/member}" th:if="${member}">
+            <span th:text="${session.member.mname}" style="color: blue;font-size: large;">user</span>
+        </a>
+        <a class="btn btn-light" href="./login.html" th:href="@{/logout}" th:if="${member}"
+            style="float: right;margin-right: 10px;color: dimgray;">登出</a>
+        <a class="btn btn-light" href="./login.html" th:href="@{/login}" th:unless="${member}"
+            style="float: right;margin-right: 10px;color: dimgray;">登入</a>
+        <!-- <a class="btn btn-secondary" href="./buyList.html" th:href="@{/products/buylist}"
+            style="float: right;margin-right: 30px;color: rgb(249, 242, 242);">得標清單</a> -->
+        <a class="btn btn-secondary" href="./products.html" th:href="@{/products}"
+            style="float: right;margin-right: 30px;color: rgb(252, 249, 249);">購物平台</a>
+
+    </div>
+    <hr class="hr-shadow">
+    <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+        <div class="wrap-login100" style="padding: 30px 30px 50px 50px;">
+            <h1 class="page-header" style="margin-bottom: 30px;">My Auction Lists</h1>
+
+            <div class="alert alert-warning alert-dismissible fade show" role="alert"
+                th:unless="${#strings.isEmpty(message)}">
+                <span th:text="${message}">message</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <p style="padding-bottom: 10px;"><a href="./input.html" th:href="@{/auction/onshelf}"
+                    class="btn btn-primary">我要拍賣</a></p>
+
+            <form action="#" method="GET" th:action="@{/auctionlist}">
+                <span style="color:dimgrey;">拍賣狀態 : </span>
+                <select name="statusSelect" style="display: inline-block;margin-bottom: 5px;">
+                    <option value=0 th:selected="${statusSelect=='0'}">全部</option>
+                    <option value=1 th:selected="${statusSelect=='1'}">競標中</option>
+                    <option value=2 th:selected="${statusSelect=='2'}">已結標</option>
+                    <option value=3 th:selected="${statusSelect=='3'}">已流標</option>
+                </select>
+                <button class="login100-form-btn" type="submit"
+                    style="max-width: 70px;max-height: 40px;float: right;margin-top: -15px;">
+                    Search
+                </button>
+
+                <div class="wrap-input100 validate-input" style="display: inline-block;">
+                    <input class="input100" type="text" name="search" th:value="${search}" style="max-height: 50px;"
+                        placeholder="請輸入相關查詢">
+                    <span class="focus-input100"></span>
+                </div>
+            </form>
+            <table class="table table-borded table-striped table-hover" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">#</th>
+                        <th style="text-align: center;">上架日期</th>
+                        <th style="text-align: center;">拍賣品</th>
+                        <th style="text-align: center;">拍賣者</th>
+                        <th style="text-align: center;">起標價</th>
+                        <th style="text-align: center;">目前競標價</th>
+                        <th style="text-align: center;">拍賣狀態</th>
+                        <!-- <th style="text-align: center;">操作</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item,iterStat:${page.content}">
+                        <td th:text="${iterStat.count}">1</td>
+                        <td th:text="${item.shelfDate}">上架日期</td>
+                        <td th:text="${item.name}">拍賣品</td>
+                        <td th:text="${item.auctioneer}">拍賣者</td>
+                        <td th:text="${item.basicPrice}">起標價</td>
+                        <td th:text="${item.bidPrice}">目前競標價</td>
+                        <td>
+                            <!-- 
+                                以下仍有問題 : 因為設置沒登入也可以瀏覽競標列表，但此時 member 為 NULL，
+                                導致 member.mid 抓不到值進而報錯
+                             -->
+                            <div th:switch="${item.status}">
+                                <!-- span 裡面不能用 p 不然 thymeleaf 會找不到 switch 的咚咚 -->
+                                <p th:case="1">競標中
+                                    <br>
+                                    <span th:unless="${login}">
+                                        <a href="#" th:href="@{'/auction/' + ${item.id} + '/bid'}"><b>參與競標</b></a>
+                                    </span>
+                                    <span th:if="${login}">
+                                        <a href="#" th:unless="${item.aid} == ${member.mid}"
+                                            th:href="@{'/auction/' + ${item.id} + '/bid'}"><b>參與競標</b></a>
+                                    </span>
+                                </p>
+                                <p th:case="2">已結標</p>
+                                <p th:case="3">已流標
+                                    <br>
+                                    <span th:if="${login}">
+                                        <a href="#" th:if="${item.aid} == ${member.mid}"
+                                            th:href="@{/auction/{id}/reshelf(id=${item.id})}"><b>更新</b></a>&nbsp;
+                                        <a href="#" th:if="${item.aid} == ${member.mid}"
+                                            th:href="@{/auction/{id}/offshelf(id=${item.id})}"><b>下架</b></a>
+                                    </span>
+                                </p>
+                            </div>
+                            <!-- <td>
+                            <a href="#" th:unless="${item.aid} == ${member.mid}"
+                                th:href="@{'/auction/' + ${item.id}} + '/bid'">參與競標</a>
+                            <a href="#" th:if="${item.aid} == ${member.mid}"
+                                th:href="@{/auction/item/update/{id}(id=${item.id})}">更新</a>
+                            <a href="#" th:if="${item.aid} == ${member.mid}"
+                                th:href="@{/auction/item/delete/{id}(id=${item.id})}">下架</a>
+                        </td> -->
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- 
+                這邊為了讓分頁換頁也能保持下拉選單以及搜尋輸入框的值，要繼續從後端
+                接收相關參數，而因為表單提交是用 GET，所以是透過 URI 傳參，所以要
+                在換頁按鈕動作那邊加上 URI 參數
+             -->
+            <nav>
+                <!-- 使用字串帶參數 -->
+                <a class="btn btn-secondary" href="#"
+                    th:href="@{'/auctionlist?page=' + ${page.number-1}} + '&statusSelect=' + ${statusSelect} + '&search=' + ${search}"
+                    th:unless="${page.first}">上一頁</a>
+                <!-- 使用賦值參數 th:href="@{/products(page=${page.number} + 1)}" -->
+                <a class="btn btn-secondary" href="#"
+                    th:href="@{'/auctionlist?page=' + ${page.number+1}} + '&statusSelect=' + ${statusSelect} + '&search=' + ${search}"
+                    th:unless="${page.last}" style="float: right;">下一頁</a>
+            </nav>
+        </div>
+    </div>
+
+    <div class="w-full text-center p-t-55" style="padding-bottom: 10px;padding-top: 10px;">
+        <span class="txt2">
+            <a href="https://www.flaticon.com/free-icons/goods" title="goods icons">Goods icons created by wanicon -
+                Flaticon</a>
+        </span>
+    </div>
+
+
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery-3.2.1.min.js" th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/animsition/js/animsition.min.js" th:src="@{/vendor/animsition/js/animsition.min.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js" th:src="@{/vendor/bootstrap/js/popper.js}"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js" th:src="@{/vendor/select2/select2.min.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/daterangepicker/moment.min.js" th:src="@{/vendor/daterangepicker/moment.min.js}"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"
+        th:src="@{/vendor/daterangepicker/daterangepicker.js}"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/countdowntime/countdowntime.js" th:src="@{/vendor/countdowntime/countdowntime.js}"></script>
+    <!--===============================================================================================-->
+    <script src="js/main.js" th:src="@{/js/main.js}"></script>
+    <!-- <script>
+        $(document).ready(() => {
+            $('close').click(() => {
+                $('.alert').alert('close');
+            });
+        });
+    </script> -->
+</body>
+
+</html>

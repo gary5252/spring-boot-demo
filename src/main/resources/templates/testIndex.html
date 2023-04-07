@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Home Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../static/vendor/jquery/jquery-3.2.1.min.js" th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+
+    <!-- 下面兩個用哪個都行 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
+</head>
+
+<body>
+
+    <button id="mybtn">Get classes</button>
+
+    <input type="hidden" value="${list}" id="list" th:value="${list}">
+    <div>
+        <ul id="output">
+
+        </ul>
+    </div>
+
+    <script>
+        const list1 = document.getElementById('list').value;
+        $('#mybtn').click(function () {
+
+            // $.getJSON('GetClasses', function (data) {
+
+            //     $("ul#output > li").remove();
+            //     console.log(data);
+
+            //     $.each(data, function (key, value) {
+            //         $("#output").append('<li>' + value['name'] + " " + value['value'] + '</li>');
+            //     });
+            // });
+            // console.log(list1);
+            let data = {
+                list: list1
+            }
+            $.post(
+                "/apiTest2/GetClasses",
+                // JSON.stringify(data),
+                (response) => {
+                    console.log(response);
+                    $.each(response, function (key, value) {
+                        $("#output").append('<li>' + value['name'] + "&nbsp;&nbsp;&nbsp; " + value['value'] + '</li>');
+                    });
+                }
+            )
+        });
+    </script>
+</body>
+
+</html>

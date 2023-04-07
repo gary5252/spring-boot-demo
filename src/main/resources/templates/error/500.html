@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500</title>
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css"
+        th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+</head>
+
+<body>
+    <!-- 
+        http 常見狀態碼 :
+        ----------正常代碼
+        200 GET 成功正常請求和回應
+        201 POST/PUT/PATCH 成功執行
+        202 請求已進入後台排隊
+        204 刪除數據成功
+        ----------異常代碼
+        401 用戶沒有資源的權限
+        403 沒有訪問資源的授權
+        404 找不到對應網頁資源
+        500 後臺服務器出現異常
+     -->
+    <div class="container" style="max-width: 600px;margin-top: 100px;">
+        <div class="jumpotron">
+            <h2>500</h2>
+            <strong>全世界的錯都來我這了是嘛</strong>
+            <p>拍謝，CODE錯了，還不快去除蟲</p>
+        </div>
+        <!-- <div class="jumpotron">
+            <h2>Error</h2>
+            <p>請求路徑 : <code th:text="${url}"></code></p>
+            <p>異常訊息 : <code th:text="${exception.message}"></code></p>
+        </div> -->
+        <div th:utext="'&lt;!--'" th:remove="tag"></div>
+        <div th:utext="'Failed Request URL : ' + ${url}" th:remove="tag"></div>
+        <div th:utext="'Exception message : ' + ${exception.message}" th:remove="tag"></div>
+        <ul th:remove="tag">
+            <li th:each="st : ${exception.stackTrace}" th:remove="tag"><span th:utext="${st}" th:remove="tag"></span>
+            </li>
+        </ul>
+        <div th:utext="'--&gt;'" th:remove="tag"></div>
+
+    </div>
+</body>
+
+</html>

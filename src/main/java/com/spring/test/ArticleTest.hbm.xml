@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.spring.test">
+
+    <class name="ArticleTest" table="ARTICLE_TEST" lazy="true">
+        <id name="id" column="ID">
+            <generator class="native"/>
+        </id>
+        <property name="title"/>
+        <property name="content"/>
+        <!-- <list name="goods" table="T_GOODS_TEST">
+            <key column="GOODS_ID"></key>
+            <list-index column="GOODS_INDEX"></list-index>
+            <element type="java.lang.String" column="GOODS_NUM"></element>
+        </list>
+        <list name="goodsAmount" table="T_GOODS_AMOUNT_TEST">
+            <key column="GOODS_AMOUNT_ID"></key>
+            <list-index column="GOODS_AMOUNT_INDEX"></list-index>
+            <element type="java.lang.Integer" column="GOODS_AMOUNT_NUM"></element>
+        </list> -->
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>競標</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="../static/images/auction1.png" th:href="@{/images/auction1.png}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css"
+		th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"
+		th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css"
+		th:href="@{/fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css" th:href="@{/vendor/animate/animate.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css"
+		th:href="@{/vendor/css-hamburgers/hamburgers.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css"
+		th:href="@{/vendor/animsition/css/animsition.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css"
+		th:href="@{/vendor/select2/select2.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css"
+		th:href="@{/vendor/daterangepicker/daterangepicker.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css" th:href="@{/css/util.css}">
+	<link rel="stylesheet" type="text/css" href="css/main.css" th:href="@{/css/main.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+</head>
+
+<body style="background-image: url('images/bg-01.jpg');">
+
+	<div style="display: inline-block;max-width: 46%;">
+		<p style="color: red;margin-left: 5%;">
+			當次競標金額需大於等於目前競標價的百分之五(5%，四捨五入至整數位)，<br>若當前無人競標，則以起標價作為基準。
+		</p>
+
+		<img src="../static/images/istockphoto-803553814-1024x1024.jpg" alt=""
+			th:src="@{/images/istockphoto-803553814-1024x1024.jpg}"
+			style="display:inline-block;max-width: 100%;max-height:100%;margin-left: 5%;margin-top: 10px;position: relative;">
+
+		<input type="hidden" name="seconds" id="seconds" value="300" th:value="${timeLeft}">
+		<div class="display">
+			<h1 class="display__time-left">剩餘時間</h1>
+			<p class="display__end-time">結束時間</p>
+		</div>
+
+
+	</div>
+	<div class="wrap-login100 p-l-110 p-r-110 p-t-62 p-b-33"
+		style="float:right;display: inline-block;margin-top: 0px;margin-right: 0px;">
+		<div class="alert alert-warning alert-dismissible fade show" role="alert"
+			th:unless="${#strings.isEmpty(message)}">
+			<strong th:text="${message}">submit success</strong>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<form class="login100-form validate-form flex-sb flex-w" method="POST" th:action="@{/auction/bid}"
+			onsubmit="return checkTime()">
+			<span class="login100-form-title p-b-53" style="padding-bottom: 20px;" th:text="${item.name}">
+				拍賣品名稱
+			</span>
+			<input type="hidden" name="itemId" th:value="${item.id}" id="itemId">
+
+			<div class="p-t-31 p-b-9">
+				<span class="txt1">
+					拍賣人
+				</span>
+			</div>
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="auctioneer" th:field="${item.auctioneer}" readonly>
+				<span class="focus-input100"></span>
+			</div>
+
+			<div class="p-t-31 p-b-9">
+				<span class="txt1">
+					拍賣品資訊
+				</span>
+			</div>
+			<div class="wrap-input100">
+				<textarea name="description" class="input100" cols="40" rows="8" th:text="${item.description}"
+					disabled="disabled"></textarea>
+				<span class="focus-input100"></span>
+			</div>
+
+			<div class="p-t-31 p-b-9">
+				<span class="txt1">
+					起標價
+				</span>
+			</div>
+			<div class="wrap-input100">
+				<input class="input100" type="text" name="basicPrice" th:field="${item.basicPrice}" readonly>
+				<span class="focus-input100"></span>
+			</div>
+
+			<div class="p-t-31 p-b-9">
+				<span class="txt1">
+					目前競標者 :
+				</span>&nbsp;
+				<strong th:text="${item.bidder}" id="bidder" style="font-size: larger;">mname</strong>&nbsp;
+				<strong th:unless="${item.bidder}" style="font-size: larger;">無</strong>&nbsp;
+				<br>
+				<span class="txt1">
+					目前競標價 :
+				</span>&nbsp;
+				<!-- <input class="input100" type="number" name="bidPrice" th:field="${item.bidPrice}" readonly>
+				<span class="focus-input100"></span> -->
+			</div>
+
+			<div class="wrap-input100">
+				<input class="input100" type="number" id="bidPrice" name="bidPrice" th:field="${item.bidPrice}"
+					readonly>
+				<span class="focus-input100"></span>
+			</div>
+
+			<div class="p-t-31 p-b-9" id="myBidPrice" th:unless="${item.aid} == ${member.mid}">
+				<span class="txt1">
+					我的出價 :
+				</span>
+			</div>
+			<div class="wrap-input100" id="myBidPriceInput" th:unless="${item.aid} == ${member.mid}">
+				<input class="input100" type="number" name="myBidPrice">
+				<span class="focus-input100"></span>
+			</div>
+			<!-- ///////////////////////////////////// -->
+			<div class="container-login100-form-btn m-t-17" id="bidButton" th:unless="${item.aid} == ${member.mid}">
+				<button class="login100-form-btn" type="submit">
+					競標
+				</button>
+			</div>
+			<div class="container-login100-form-btn m-t-17">
+				<button class="login100-form-btn" type="button" id="leave">
+					<!-- <a href="#" th:href="@{/auctionlist}"
+						style="width:100%;height:100%;display:inline-block;color:white;font-size:medium;padding-top: 1rem;"> -->
+					返回列表
+					<!-- </a> -->
+				</button>
+			</div>
+			<!-- ///////////////////////////////// -->
+			<div class="w-full text-center p-t-55">
+				<span class="txt2">
+					<a href="https://www.flaticon.com/free-icons/regulatory" title="regulatory icons">Regulatory
+						icons created by Muhammad_Usman - Flaticon</a>
+				</span>
+			</div>
+		</form>
+	</div>
+
+
+	<div id="dropDownSelect1"></div>
+
+	<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js" th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/animsition/js/animsition.min.js" th:src="@{/vendor/animsition/js/animsition.min.js}"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js" th:src="@{/vendor/bootstrap/js/popper.js}"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js" th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js" th:src="@{/vendor/select2/select2.min.js}"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/daterangepicker/moment.min.js" th:src="@{/vendor/daterangepicker/moment.min.js}"></script>
+	<script src="vendor/daterangepicker/daterangepicker.js"
+		th:src="@{/vendor/daterangepicker/daterangepicker.js}"></script>
+	<!--===============================================================================================-->
+	<script src="vendor/countdowntime/countdowntime.js" th:src="@{/vendor/countdowntime/countdowntime.js}"></script>
+	<!--===============================================================================================-->
+	<!-- websockets -->
+	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"
+		integrity="sha512-tL4PIUsPy+Rks1go4kQG8M8/ItpRMvKnbBjQm4d2DQnFwgcBYRRN00QdyQnWSCwNMsoY/MfJY8nHp2CzlNdtZA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<!-- custom -->
+	<script type="text/javascript" th:src="@{/js/WebSockets.js}"></script>
+	<script type="text/javascript" th:src="@{/js/room.js}"></script>
+	<script src="static/js/main.js" th:src="@{static/js/main.js}"></script>
+	<script>
+		let countdown;
+		const timerDisplay = document.querySelector('.display__time-left');
+		const endTime = document.querySelector('.display__end-time');
+		let elem = document.querySelector('#myBidPrice');
+		let elem1 = document.querySelector('#myBidPriceInput');
+		let elem2 = document.querySelector('#bidButton');
+		let timeOverFlag = false;
+
+		window.onload = function () {
+			// const times = document.customForm.seconds.value;
+			const times = document.getElementById("seconds").value;
+			timer(times);
+		}
+
+		function timer(seconds) {
+			// clear any existing timers
+			clearInterval(countdown);
+
+			timeOverFlag = false;
+			const now = Date.now();
+			const then = now + seconds * 1000;
+			displayTimeLeft(seconds);
+			displayEndTime(then);
+
+			countdown = setInterval(() => {
+				const secondsLeft = Math.round((then - Date.now()) / 1000);
+				// const secondsLeft = seconds--;
+				// check if we should stop it!
+				if (secondsLeft < 0) {
+					clearInterval(countdown);
+					// alert("Time Over!");
+					document.title = '競標結束!';
+					timerDisplay.textContent = '競標結束!';
+					elem.remove();
+					elem1.remove();
+					elem2.remove();
+					timeOverFlag = true;
+					return;
+				}
+				// display it
+				displayTimeLeft(secondsLeft);
+			}, 1000);
+		}
+
+		function displayTimeLeft(seconds) {
+			const hours = Math.floor(seconds / 3600);
+			const minutes = Math.floor((seconds % 3600) / 60);
+			const remainderSeconds = seconds % 60;
+			const display = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
+			document.title = display;
+			timerDisplay.textContent = display;
+		}
+
+		function displayEndTime(timestamp) {
+			const end = new Date(timestamp);
+			const hour = end.getHours();
+			const adjustedHour = hour > 12 ? hour - 12 : hour;
+			const minutes = end.getMinutes();
+			endTime.textContent = `Time Ends At ${adjustedHour}:${minutes < 10 ? '0' : ''}${minutes}`;
+		}
+
+		function checkTime() {
+			if (timeOverFlag) {
+				alert('競標時限已過!')
+				return false;
+			}
+			else {
+				return true;
+			}
+		}
+
+	</script>
+
+</body>
+
+</html>

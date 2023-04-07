@@ -1,0 +1,6 @@
+product: 
+  pid: 1
+  name: PC
+  price: 20000
+  amount: ${random.int}
+  description: ${product.name}, is selling

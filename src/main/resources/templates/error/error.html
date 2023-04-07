@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>錯誤</title>
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css"
+        th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+</head>
+
+<body>
+    <!-- 
+        http 常見狀態碼 :
+        ----------正常代碼
+        200 GET 成功正常請求和回應
+        201 POST/PUT/PATCH 成功執行
+        202 請求已進入後台排隊
+        204 刪除數據成功
+        ----------異常代碼
+        401 用戶沒有資源的權限
+        403 沒有訪問資源的授權
+        404 找不到對應網頁資源
+        500 後臺服務器出現異常
+     -->
+    <div class="container" style="max-width: 600px;margin-top: 100px;">
+        <div class="jumpotron">
+            <h2>Error</h2>
+            <p>拍謝，CODE錯了，還不快去除錯</p>
+            <p>請求路徑 : <code th:text="${url}"></code></p>
+            <p>異常訊息 : <code th:text="${exception.getMessage()}"></code></p>
+        </div>
+    </div>
+</body>
+
+</html>
